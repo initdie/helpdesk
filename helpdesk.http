@@ -1,0 +1,21 @@
+@helpdesk_HostAddress = http://localhost:5279
+
+GET {{helpdesk_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
+
+POST {{helpdesk_HostAddress}}/api/Ticket/?title=Test2%20Ticket&description=This%20is%20a%20test%20ticket2&
+###
+GET {{helpdesk_HostAddress}}/api/Ticket/23
+
+###
+DELETE {{helpdesk_HostAddress}}/api/Ticket/23
+
+###
+POST {{helpdesk_HostAddress}}/api/Ticket
+Content-Type: application/json
+{
+  "title": "Test Ticket 3",
+  "description": "This is a test ticket"
+}

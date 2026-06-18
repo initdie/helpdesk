@@ -1,0 +1,79 @@
+﻿using helpdesk.Interfaces;
+using helpdesk.Models;
+using Microsoft.AspNetCore.Mvc;
+using System.Reflection;
+// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+
+namespace helpdesk
+{
+    [AttributeUsage(AttributeTargets.Method)]
+    public class CommandAttribute: Attribute
+    {
+        public string Name { get; }
+        public CommandAttribute(string name) => Name = name;
+    }
+
+    public record CreateTicketDto(string Title, string Description);
+    public record UpdateTicketDto(string Title, string Description);
+
+    public record ResponseTicketDto(string Title, string Description);
+
+    [Route("api/[controller]")]
+    [ApiController]
+    public class TicketController : ControllerBase
+    {
+        private readonly ITicketServiceDb _dbService;
+        public TicketController(ITicketServiceDb ticketServiceDb)
+        {
+            _dbService = ticketServiceDb;
+        }
+        // GET: api/<TicketController>
+        [HttpGet]
+        public async Task<IActionResult> Get()
+        {
+            var tickets = await _dbService.GetAllTicketsAsync();
+            return Ok(tickets);
+        }
+
+        // GET api/<TicketController/5
+        [HttpGet("{id}")]
+        public async Task<IActionResult> Get(int id)
+        {
+            var ticket = await _dbService.GetTicketByIdAsync(id);
+            if (ticket == null)
+            {
+                return NotFound();
+            }
+            return Ok(ticket);
+        }
+
+        // POST api/<TicketController>
+        [HttpPost]
+        public async Task<IActionResult> Post([FromBody] CreateTicketDto dto)
+        {
+            await _dbService.WriteTicketToDbAsync(dto);
+            return Ok();
+        }
+
+        // PUT api/<TicketController>/5
+        [HttpPut("{id}")]
+        public async Task<ActionResult<bool>> Put(int id, [FromBody] UpdateTicketDto dto)
+        {
+            var result = await _dbService.UpdateTicketInDbAsync(id, dto);
+            return Ok(result);
+        }
+
+        // DELETE api/<TicketController>/5
+        [HttpDelete("{id}")]
+        public async Task<ActionResult<bool>> Delete(int id)
+        {
+            var ticket = await _dbService.GetTicketByIdAsync(id);
+            if (ticket == null)
+            {
+                return NotFound();
+            }
+            var result = await _dbService.DeleteTicketAsync(id);
+            return Ok(result);
+        }
+    }
+}
