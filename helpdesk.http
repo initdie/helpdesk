@@ -7,16 +7,16 @@ Accept: application/json
 
 POST {{helpdesk_HostAddress}}/api/Ticket/?title=Test2%20Ticket&description=This%20is%20a%20test%20ticket2&
 ###
-GET {{helpdesk_HostAddress}}/api/Ticket/2
+GET {{helpdesk_HostAddress}}/api/Ticket/5
 
 ###
-DELETE {{helpdesk_HostAddress}}/api/Ticket/23
+DELETE {{helpdesk_HostAddress}}/api/Ticket/4
 
 ###
 POST {{helpdesk_HostAddress}}/api/Ticket
 Content-Type: application/json
 {
-  "title": "Test Ticket 3",
+  "title": "Test Ticket 4",
   "description": "This is a test ticket"
 }
 
@@ -26,3 +26,9 @@ Content-Type: application/json
 {
   "status": "InProgress"
 }
+
+###
+GET {{helpdesk_HostAddress}}/api/Ticket
+
+###
+PATCH {{helpdesk_HostAddress}}/api/Ticket/5/assign?AgentId=7

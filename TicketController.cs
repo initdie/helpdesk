@@ -22,11 +22,14 @@ namespace helpdesk
         }
         // GET: api/<TicketController>
         [HttpGet]
-        public async Task<IActionResult> Get()
+        public async Task<IActionResult> Get([FromQuery] TicketStatus? status)
         {
-            var tickets = await _dbService.GetAllTicketsAsync();
+            var tickets = await _dbService.GetAllTicketsAsync(status);
             return Ok(tickets);
         }
+
+            
+        
 
         // GET api/<TicketController/5
         [HttpGet("{id}")]

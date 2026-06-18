@@ -49,9 +49,17 @@ namespace helpdesk
             return await dbContext.Tickets.FindAsync(id);
         }
 
-        public async Task<List<Ticket>> GetAllTicketsAsync()
+        public async Task<List<Ticket>> GetAllTicketsAsync(TicketStatus? status)
         {
-            return await dbContext.Tickets.AsAsyncEnumerable().ToListAsync();
+            IQueryable<Ticket> query = dbContext.Tickets;
+            if(status.HasValue)
+            {
+                return await query.Where(t => t.Status == status.Value).ToListAsync();
+            }
+            return await query.ToListAsync();
+
+
+
         }
 
         public async Task<bool> AssignTicketAsync(int ticketId, int agentId)
