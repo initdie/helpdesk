@@ -1,5 +1,6 @@
 using helpdesk.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using System.Text.Json.Serialization;
 namespace helpdesk
 {
     public class Program
@@ -16,6 +17,9 @@ namespace helpdesk
             builder.Services.AddScoped<ITicketServiceDb, TicketService>();
             builder.Services.AddDbContext<AppDbContext>(options =>
                 options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+            builder.Services.AddControllers()
+                .AddJsonOptions(o =>
+                o.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()));
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.

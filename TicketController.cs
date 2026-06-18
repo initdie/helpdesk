@@ -1,21 +1,14 @@
 ﻿using helpdesk.Interfaces;
 using helpdesk.Models;
 using Microsoft.AspNetCore.Mvc;
-using System.Reflection;
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace helpdesk
 {
-    [AttributeUsage(AttributeTargets.Method)]
-    public class CommandAttribute: Attribute
-    {
-        public string Name { get; }
-        public CommandAttribute(string name) => Name = name;
-    }
-
     public record CreateTicketDto(string Title, string Description);
     public record UpdateTicketDto(string Title, string Description);
 
+    public record ChangeStatusDto(TicketStatus Status);
     public record ResponseTicketDto(string Title, string Description);
 
     [Route("api/[controller]")]
@@ -57,24 +50,31 @@ namespace helpdesk
 
         // PUT api/<TicketController>/5
         [HttpPut("{id}")]
-        public async Task<ActionResult<bool>> Put(int id, [FromBody] UpdateTicketDto dto)
+        public async Task<IActionResult> Put(int id, [FromBody] UpdateTicketDto dto)
         {
             var result = await _dbService.UpdateTicketInDbAsync(id, dto);
-            return Ok(result);
+            return result ? NoContent() : NotFound();
         }
 
         // DELETE api/<TicketController>/5
         [HttpDelete("{id}")]
-        public async Task<ActionResult<bool>> Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
             var result = await _dbService.DeleteTicketAsync(id);
             return result ? NoContent() : NotFound();
         }
 
         [HttpPatch("{ticketId}/assign")]
-        public async Task<ActionResult<bool>> AssignTicket(int ticketId, int agentId)
+        public async Task<IActionResult> AssignTicket(int ticketId, int agentId)
         {
             var result = await _dbService.AssignTicketAsync(ticketId, agentId);
+            return result ? NoContent() : NotFound();
+        }
+
+        [HttpPatch("{ticketId}/status")]
+        public async Task<IActionResult> ChangeStatus(int ticketId, [FromBody] ChangeStatusDto dto)
+        {
+            var result = await _dbService.ChangeStatusAsync(ticketId, dto.Status);
             return result ? NoContent() : NotFound();
         }
     }

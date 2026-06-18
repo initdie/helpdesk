@@ -64,8 +64,22 @@ namespace helpdesk
 
             ticket.Status = TicketStatus.InProgress;
             ticket.AssignedAgentId = agentId;
-            var affectedRows = await dbContext.SaveChangesAsync();
-            return affectedRows > 0;
+            await dbContext.SaveChangesAsync();
+            return true;
         }
-}
+
+        public async Task<bool> ChangeStatusAsync(int ticketId, TicketStatus ticketStatus) 
+        {
+            var ticket = await dbContext.Tickets.FindAsync(ticketId);
+            if (ticket == null)
+            {
+                return false;
+            }
+            ticket.Status = ticketStatus;
+            await dbContext.SaveChangesAsync();
+            return true;
+        }
+
+    }
+    
 }

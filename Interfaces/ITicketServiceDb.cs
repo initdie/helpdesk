@@ -10,5 +10,6 @@ namespace helpdesk.Interfaces
         Task<Ticket?> GetTicketByIdAsync(int id);
         Task<List<Ticket>> GetAllTicketsAsync();
         Task<bool> AssignTicketAsync(int ticketId, int agentId);
+        Task<bool> ChangeStatusAsync(int ticketId, TicketStatus ticketStatus);
     }
 }
