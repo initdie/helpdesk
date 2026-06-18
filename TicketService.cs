@@ -53,5 +53,19 @@ namespace helpdesk
         {
             return await dbContext.Tickets.AsAsyncEnumerable().ToListAsync();
         }
-    }
+
+        public async Task<bool> AssignTicketAsync(int ticketId, int agentId)
+        {
+            var ticket = await dbContext.Tickets.FindAsync(ticketId);
+            if (ticket == null)
+            {
+                return false;
+            }
+
+            ticket.Status = TicketStatus.InProgress;
+            ticket.AssignedAgentId = agentId;
+            var affectedRows = await dbContext.SaveChangesAsync();
+            return affectedRows > 0;
+        }
+}
 }

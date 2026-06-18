@@ -9,5 +9,6 @@ namespace helpdesk.Interfaces
         Task<bool> DeleteTicketAsync(int id);
         Task<Ticket?> GetTicketByIdAsync(int id);
         Task<List<Ticket>> GetAllTicketsAsync();
+        Task<bool> AssignTicketAsync(int ticketId, int agentId);
     }
 }

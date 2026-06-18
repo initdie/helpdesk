@@ -67,13 +67,15 @@ namespace helpdesk
         [HttpDelete("{id}")]
         public async Task<ActionResult<bool>> Delete(int id)
         {
-            var ticket = await _dbService.GetTicketByIdAsync(id);
-            if (ticket == null)
-            {
-                return NotFound();
-            }
             var result = await _dbService.DeleteTicketAsync(id);
-            return Ok(result);
+            return result ? NoContent() : NotFound();
+        }
+
+        [HttpPatch("{ticketId}/assign")]
+        public async Task<ActionResult<bool>> AssignTicket(int ticketId, int agentId)
+        {
+            var result = await _dbService.AssignTicketAsync(ticketId, agentId);
+            return result ? NoContent() : NotFound();
         }
     }
 }
