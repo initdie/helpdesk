@@ -1,5 +1,6 @@
 ﻿using helpdesk.Interfaces;
 using helpdesk.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -11,6 +12,7 @@ namespace helpdesk
     public record ChangeStatusDto(TicketStatus Status);
     public record ResponseTicketDto(string Title, string Description);
 
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class TicketController : ControllerBase
@@ -67,6 +69,7 @@ namespace helpdesk
             return result ? NoContent() : NotFound();
         }
 
+        [Authorize(Roles = "Agent")]
         [HttpPatch("{ticketId}/assign")]
         public async Task<IActionResult> AssignTicket(int ticketId, int agentId)
         {

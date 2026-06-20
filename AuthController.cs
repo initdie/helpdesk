@@ -32,5 +32,12 @@ namespace helpdesk
             return BadRequest();
         }
 
+        [HttpPost("login")]
+        public async Task<IActionResult> Login([FromBody] LoginDto dto)
+        {
+            var token = await _authService.LoginAsync(dto);
+            if(token == null) return Unauthorized();
+            return Ok(new {token});
+        }
     }
 }
