@@ -1,4 +1,5 @@
-﻿using helpdesk.Interfaces;
+﻿using System.Security.Claims;
+using helpdesk.Interfaces;
 using helpdesk.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -71,8 +72,9 @@ namespace helpdesk
 
         [Authorize(Roles = "Agent")]
         [HttpPatch("{ticketId}/assign")]
-        public async Task<IActionResult> AssignTicket(int ticketId, int agentId)
+        public async Task<IActionResult> AssignTicket([FromBody] int ticketId)
         {
+            var agentId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
             var result = await _dbService.AssignTicketAsync(ticketId, agentId);
             return result ? NoContent() : NotFound();
         }
