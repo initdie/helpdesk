@@ -32,3 +32,11 @@ GET {{helpdesk_HostAddress}}/api/Ticket?status=2
 
 ###
 PATCH {{helpdesk_HostAddress}}/api/Ticket/5/assign?AgentId=7
+
+###
+POST {{helpdesk_HostAddress}}/api/auth/register
+Content-Type: application/json
+{
+  "Password": "admin",
+  "Role": "Admin",
+}

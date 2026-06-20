@@ -17,6 +17,7 @@ namespace helpdesk
             builder.Services.AddScoped<ITicketServiceDb, TicketService>();
             builder.Services.AddDbContext<AppDbContext>(options =>
                 options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+            builder.Services.AddScoped<IAuthService, AuthService>();
             builder.Services.AddControllers()
                 .AddJsonOptions(o =>
                 o.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()));

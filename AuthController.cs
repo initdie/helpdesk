@@ -1,0 +1,36 @@
+﻿using helpdesk.Interfaces;
+using helpdesk.Models;
+using Microsoft.AspNetCore.Mvc;
+
+// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+
+namespace helpdesk
+{
+    
+    [Route("api/[controller]")]
+    [ApiController]
+    public class AuthController : ControllerBase
+    {
+        private readonly IAuthService _authService;
+
+        public AuthController(IAuthService authService)
+        {
+            _authService = authService;
+        }
+
+        // POST auth/<ValuesController>
+        [HttpPost("register")]
+        public async Task<IActionResult> Register([FromBody] RegisterDto dto)
+        {
+            
+            var result = await _authService.RegisterAsync(dto);
+            if (result)
+            {
+                return Ok();
+            }
+            
+            return BadRequest();
+        }
+
+    }
+}
