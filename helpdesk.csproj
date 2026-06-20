@@ -15,5 +15,11 @@
 		</PackageReference>
 		<PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="10.0.2" />
 	</ItemGroup>
+	<ItemGroup>
+  		<Compile Remove="helpdesk.Tests/**/*.cs" />
+  		<Content Remove="helpdesk.Tests/**" />
+  		<None Remove="helpdesk.Tests/**" />
+  		<EmbeddedResource Remove="helpdesk.Tests/**" />
+	</ItemGroup>
 
 </Project>

@@ -21,14 +21,14 @@ Content-Type: application/json
 }
 
 ###
-PATCH {{helpdesk_HostAddress}}/api/Ticket/2/status
+PATCH {{helpdesk_HostAddress}}/api/Ticket/5/status
 Content-Type: application/json
 {
-  "status": "InProgress"
+  "status": "Done"
 }
 
 ###
-GET {{helpdesk_HostAddress}}/api/Ticket
+GET {{helpdesk_HostAddress}}/api/Ticket?status=2
 
 ###
 PATCH {{helpdesk_HostAddress}}/api/Ticket/5/assign?AgentId=7
