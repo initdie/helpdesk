@@ -1,5 +1,6 @@
 using helpdesk.Interfaces;
 using helpdesk.Services;
+using MassTransit;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -39,6 +40,19 @@ namespace helpdesk
                     IssuerSigningKey = new SymmetricSecurityKey(
                         Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]!))
                 };
+            });
+            builder.Services.AddMassTransit(x =>
+            {
+                x.AddConsumer<TicketAssignedConsumer>();
+                x.UsingRabbitMq((context, cfg) =>
+                {
+                    cfg.Host(builder.Configuration["RabbitMQ:Host"]!, "/", h =>
+                    {
+                        h.Username(builder.Configuration["RabbitMQ:Username"]!);
+                        h.Password(builder.Configuration["RabbitMQ:Password"]!);
+                    });
+                    cfg.ConfigureEndpoints(context);
+                });
             });
             var app = builder.Build();
             app.UseAuthentication();

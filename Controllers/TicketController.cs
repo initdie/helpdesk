@@ -69,7 +69,7 @@ namespace helpdesk.Controller
 
         [Authorize(Roles = "Agent")]
         [HttpPatch("{ticketId}/assign")]
-        public async Task<IActionResult> AssignTicket([FromBody] int ticketId)
+        public async Task<IActionResult> AssignTicket(int ticketId)
         {
             var agentId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
             var result = await _dbService.AssignTicketAsync(ticketId, agentId);

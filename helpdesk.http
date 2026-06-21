@@ -40,3 +40,9 @@ Content-Type: application/json
   "Password": "admin",
   "Role": "Admin",
 }
+
+###
+POST http://localhost:5279/api/auth/login
+Content-Type: application/json
+
+{ "email": "agent@helpdesk.com", "password": "Pass123!" }

@@ -1,20 +1,27 @@
-﻿using helpdesk.Controller;
+﻿using helpdesk.Contracts;
 using helpdesk.Interfaces;
 using helpdesk.Models.DTO;
 using helpdesk.Models.Entities;
 using helpdesk.Models.Enums;
+using MassTransit;
 using Microsoft.EntityFrameworkCore;
 
 namespace helpdesk.Services
 {
     public class TicketService : ITicketServiceDb
     {
-        private AppDbContext dbContext;
-        public TicketService(AppDbContext appDb)
+        private readonly AppDbContext dbContext;
+        private readonly IPublishEndpoint _publishEndpoint;
+        public TicketService(AppDbContext appDb, IPublishEndpoint publishEndpoint)
         {
             dbContext = appDb;
+            _publishEndpoint = publishEndpoint;
         }
 
+        public TicketService(AppDbContext appDb)
+        {
+            dbContext = appDb;       
+        }
         public async Task WriteTicketToDbAsync(CreateTicketDto dto)
         {
             var ticket = new Ticket
@@ -73,6 +80,7 @@ namespace helpdesk.Services
             ticket.Status = TicketStatus.InProgress;
             ticket.AssignedAgentId = agentId;
             await dbContext.SaveChangesAsync();
+            await _publishEndpoint.Publish(new TicketAssigned(ticketId, agentId, DateTime.UtcNow));
             return true;
         }
 
