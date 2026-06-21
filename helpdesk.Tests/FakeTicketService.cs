@@ -11,7 +11,7 @@ public class FakeTicketService : ITicketServiceDb
     public Ticket? TicketToReturn;
     public bool BoolToReturn;
     public List<Ticket> ListToReturn = new();
-
+     
     public Task<Ticket?> GetTicketByIdAsync(int id) => Task.FromResult(TicketToReturn);
     public Task<bool> AssignTicketAsync(int ticketId, int agentId) => Task.FromResult(BoolToReturn);
     public Task<bool> ChangeStatusAsync(int ticketId, TicketStatus status) => Task.FromResult(BoolToReturn);

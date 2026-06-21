@@ -60,9 +60,6 @@ namespace helpdesk.Services
                 return await query.Where(t => t.Status == status.Value).ToListAsync();
             }
             return await query.ToListAsync();
-
-
-
         }
 
         public async Task<bool> AssignTicketAsync(int ticketId, int agentId)

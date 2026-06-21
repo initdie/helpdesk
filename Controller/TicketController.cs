@@ -23,6 +23,8 @@ namespace helpdesk.Controller
         public async Task<IActionResult> Get([FromQuery] TicketStatus? status)
         {
             var tickets = await _dbService.GetAllTicketsAsync(status);
+            if (tickets == null)
+                return NotFound();
             return Ok(tickets);
         }
 
@@ -53,7 +55,7 @@ namespace helpdesk.Controller
         [HttpPut("{id}")]
         public async Task<IActionResult> Put(int id, [FromBody] UpdateTicketDto dto)
         {
-            var result = await _dbService.UpdateTicketInDbAsync(id, dto);
+            var result = await _dbService.UpdateTicketInDbAsync(id, dto);   
             return result ? NoContent() : NotFound();
         }
 
