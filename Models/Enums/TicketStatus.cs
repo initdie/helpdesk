@@ -1,4 +1,4 @@
-﻿namespace helpdesk.Models
+﻿namespace helpdesk.Models.Enums
 {
     public enum TicketStatus
     {

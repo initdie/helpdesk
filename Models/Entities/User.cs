@@ -1,4 +1,6 @@
-﻿namespace helpdesk.Models
+﻿using helpdesk.Models.Enums;
+
+namespace helpdesk.Models.Entities
 {
     public class User
     {

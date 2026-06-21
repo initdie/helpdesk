@@ -1,4 +1,4 @@
-﻿using helpdesk.Models;
+﻿using helpdesk.Models.Entities;
 using Microsoft.EntityFrameworkCore;
 
 

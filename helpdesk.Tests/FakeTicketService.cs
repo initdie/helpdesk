@@ -1,5 +1,7 @@
 using helpdesk.Interfaces;
-using helpdesk.Models;
+using helpdesk.Models.DTO;
+using helpdesk.Models.Entities;
+using helpdesk.Models.Enums;
 
 namespace helpdesk.Tests;
 

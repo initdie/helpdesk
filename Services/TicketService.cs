@@ -1,8 +1,10 @@
 ﻿using helpdesk.Interfaces;
-using helpdesk.Models;
+using helpdesk.Models.DTO;
+using helpdesk.Models.Entities;
+using helpdesk.Models.Enums;
 using Microsoft.EntityFrameworkCore;
 
-namespace helpdesk
+namespace helpdesk.Services
 {
     public class TicketService : ITicketServiceDb
     {

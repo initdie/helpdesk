@@ -1,18 +1,13 @@
 ﻿using System.Security.Claims;
 using helpdesk.Interfaces;
-using helpdesk.Models;
+using helpdesk.Models.DTO;
+using helpdesk.Models.Enums;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
-namespace helpdesk
+namespace helpdesk.Controller
 {
-    public record CreateTicketDto(string Title, string Description);
-    public record UpdateTicketDto(string Title, string Description);
-
-    public record ChangeStatusDto(TicketStatus Status);
-    public record ResponseTicketDto(string Title, string Description);
-
     [Authorize]
     [Route("api/[controller]")]
     [ApiController]

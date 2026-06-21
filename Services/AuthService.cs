@@ -1,13 +1,13 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-using BCrypt.Net;
 using helpdesk.Interfaces;
-using helpdesk.Models;
+using helpdesk.Models.DTO;
+using helpdesk.Models.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 
-namespace helpdesk
+namespace helpdesk.Services
 {
     public class AuthService : IAuthService
     {
@@ -23,7 +23,7 @@ namespace helpdesk
             if(await _dbService.Users.AnyAsync(u => u.Email == dto.Email))
                 return false;
 
-            var user = new Models.User
+            var user = new User
             {
                 Email = dto.Email,
                 HashPassword = BCrypt.Net.BCrypt.HashPassword(dto.Password),

@@ -1,4 +1,5 @@
 using helpdesk.Interfaces;
+using helpdesk.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
