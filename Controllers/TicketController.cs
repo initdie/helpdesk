@@ -19,6 +19,7 @@ namespace helpdesk.Controller
             _dbService = ticketServiceDb;
         }
         // GET: api/<TicketController>
+        [AllowAnonymous]
         [HttpGet]
         public async Task<IActionResult> Get([FromQuery] TicketStatus? status)
         {

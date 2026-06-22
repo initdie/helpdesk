@@ -54,8 +54,15 @@ namespace helpdesk
                     cfg.ConfigureEndpoints(context);
                 });
             });
+            builder.Services.AddCors(options =>
+            {
+                options.AddPolicy("AllowFrontend", policy =>
+                    policy.WithOrigins("http://localhost:5173")
+                        .AllowAnyHeader()
+                        .AllowAnyMethod());
+            });
             var app = builder.Build();
-            app.UseAuthentication();
+            
             
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
@@ -63,6 +70,10 @@ namespace helpdesk
                 app.MapOpenApi();
             }
 
+            app.UseCors("AllowFrontend");
+
+            app.UseAuthentication();
+            
             app.UseHttpsRedirection();
 
             app.UseAuthorization();
