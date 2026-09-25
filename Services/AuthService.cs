@@ -4,6 +4,7 @@ using System.Text;
 using helpdesk.Interfaces;
 using helpdesk.Models.DTO;
 using helpdesk.Models.Entities;
+using helpdesk.Models.Enums;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 
@@ -13,24 +14,40 @@ namespace helpdesk.Services
     {
         private readonly AppDbContext _dbService;
         private readonly IConfiguration _config;
-        public AuthService(AppDbContext context, IConfiguration configuration)
+        private readonly ILogger<AuthService> _logger;
+        public AuthService(AppDbContext context, IConfiguration configuration, ILogger<AuthService> logger)
         {
             _dbService = context;
             _config = configuration;
+            _logger = logger;
         }
         public async Task<bool> RegisterAsync(RegisterDto dto)
         {
             if(await _dbService.Users.AnyAsync(u => u.Email == dto.Email))
+            {
+                _logger.LogWarning($"User with email {dto.Email} already exists.");
                 return false;
-
+            }
+               
             var user = new User
             {
                 Email = dto.Email,
                 HashPassword = BCrypt.Net.BCrypt.HashPassword(dto.Password),
-                Role = dto.Role
+                Role = Role.User
             };
-            _dbService.Users.Add(user);
-            await _dbService.SaveChangesAsync();
+
+            try
+            {
+                _dbService.Users.Add(user);
+                _logger.LogInformation($"User {user.Email} registered successfully.");
+                await _dbService.SaveChangesAsync();
+            }
+            catch (DbUpdateException)
+            {
+                _logger.LogError("Error occurred while saving user.");
+                return false;
+            }
+
             return true;
         }
 
@@ -41,6 +58,7 @@ namespace helpdesk.Services
             if(!BCrypt.Net.BCrypt.Verify(dto.Password, user.HashPassword))
                 return null;
 
+            _logger.LogInformation($"Generating token for user {user.Email}.");
             return GenerateToken(user);
         }
 
@@ -49,7 +67,7 @@ namespace helpdesk.Services
             var claims = new[]
             {
                 new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()), // id агента
-                new Claim(ClaimTypes.Role, user.Role.ToString())          // роль
+                new Claim(ClaimTypes.Role, user.Role.ToString()),
             };
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Jwt:Key"]!));

@@ -1,0 +1,32 @@
+<div class="ticket-create-container">
+  <h2>Новий тікет</h2>
+
+  <form [formGroup]="form" (ngSubmit)="onSubmit()">
+
+    <div class="form-field">
+      <label for="title">Заголовок</label>
+      <input id="title" type="text" formControlName="title" />
+      @if (form.controls.title.invalid && form.controls.title.touched) {
+        <span class="error">Введіть заголовок (до 200 символів)</span>
+      }
+    </div>
+
+    <div class="form-field">
+      <label for="description">Опис</label>
+      <textarea id="description" rows="5" formControlName="description"></textarea>
+      @if (form.controls.description.invalid && form.controls.description.touched) {
+        <span class="error">Введіть опис проблеми</span>
+      }
+    </div>
+
+    @if (errorMessage) {
+      <p class="error">{{ errorMessage }}</p>
+    }
+
+    <button type="submit" [disabled]="isLoading">
+      {{ isLoading ? 'Зачекайте...' : 'Створити тікет' }}
+    </button>
+  </form>
+
+  <p><a routerLink="/tickets">Назад до списку</a></p>
+</div>

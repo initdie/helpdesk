@@ -19,13 +19,25 @@ namespace helpdesk
             builder.Services.AddControllers();
             // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
             builder.Services.AddOpenApi();
+            
             builder.Services.AddScoped<ITicketServiceDb, TicketService>();
+            
             builder.Services.AddDbContext<AppDbContext>(options =>
-                options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+                options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"), npgsqlOptions =>
+                {
+                    npgsqlOptions.EnableRetryOnFailure(
+                        maxRetryCount: 5,
+                        maxRetryDelay: TimeSpan.FromSeconds(10),
+                        errorCodesToAdd: null
+                        );
+                }));
+            
             builder.Services.AddScoped<IAuthService, AuthService>();
+            
             builder.Services.AddControllers()
                 .AddJsonOptions(o =>
                 o.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()));
+
             builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             .AddJwtBearer(options =>
             {
@@ -41,6 +53,7 @@ namespace helpdesk
                         Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]!))
                 };
             });
+
             builder.Services.AddMassTransit(x =>
             {
                 x.AddConsumer<TicketAssignedConsumer>();
@@ -54,12 +67,23 @@ namespace helpdesk
                     cfg.ConfigureEndpoints(context);
                 });
             });
+
+            builder.Services.AddOptions<MassTransitHostOptions>()
+                .Configure(options =>
+                {
+                    options.WaitUntilStarted = true;
+                    options.StartTimeout = TimeSpan.FromSeconds(10);
+                    options.StopTimeout = TimeSpan.FromSeconds(30);
+                });
+
             builder.Services.AddCors(options =>
             {
                 options.AddPolicy("AllowFrontend", policy =>
                     policy.WithOrigins("http://localhost:5173")
                         .AllowAnyHeader()
-                        .AllowAnyMethod());
+                        .AllowAnyMethod()
+                        .WithOrigins("http://localhost:4200"));
+                    
             });
             var app = builder.Build();
             
@@ -71,7 +95,7 @@ namespace helpdesk
             }
 
             app.UseCors("AllowFrontend");
-
+            
             app.UseAuthentication();
             
             app.UseHttpsRedirection();

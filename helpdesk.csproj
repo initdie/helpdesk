@@ -25,5 +25,9 @@
   		<None Remove="helpdesk.Tests/**" />
   		<EmbeddedResource Remove="helpdesk.Tests/**" />
 	</ItemGroup>
+	<ItemGroup>
+	  <Folder Include="client\src\app\core\" />
+	  <Folder Include="client\src\app\auth\" />
+	</ItemGroup>
 
 </Project>

@@ -1,0 +1,7 @@
+<div class="ticket-card">
+  <div class="ticket-card-header">
+    <h3>{{ title() }}</h3>
+    <span class="status-badge" [class]="'status-' + status()">{{ statusLabel() }}</span>
+  </div>
+  <p class="ticket-card-desc">{{ description() }}</p>
+</div>

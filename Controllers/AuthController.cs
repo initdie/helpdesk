@@ -30,7 +30,7 @@ namespace helpdesk.Controller
                 return Ok();
             }
             
-            return BadRequest();
+            return BadRequest(new { message = $"Registration failed. Result: {result}" });
         }
 
         [HttpPost("login")]

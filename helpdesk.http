@@ -37,8 +37,8 @@ PATCH {{helpdesk_HostAddress}}/api/Ticket/5/assign?AgentId=7
 POST {{helpdesk_HostAddress}}/api/auth/register
 Content-Type: application/json
 {
+  "Email": "admin@helpdesk.com",
   "Password": "admin",
-  "Role": "Admin",
 }
 
 ###

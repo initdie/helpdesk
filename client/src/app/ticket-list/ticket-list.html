@@ -1,0 +1,12 @@
+<div class="page-header">
+  <h2>Тікети</h2>
+  <a routerLink="/tickets/new" class="btn btn-primary">+ Новий тікет</a>
+</div>
+
+<div class="ticket-grid">
+  @for (ticket of tickets(); track ticket.id) {
+    <app-ticket-card [title]="ticket.title" [description]="ticket.description" [status]="ticket.status"></app-ticket-card>
+  } @empty {
+    <p class="empty-state">Тікетів поки немає.</p>
+  }
+</div>

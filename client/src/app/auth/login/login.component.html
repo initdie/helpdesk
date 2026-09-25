@@ -1,0 +1,31 @@
+<div class="auth-container">
+  <h2>Вхід</h2>
+
+  <form [formGroup]="form" (ngSubmit)="onSubmit()">
+    <div class="form-field">
+      <label for="email">Email</label>
+      <input id="email" type="email" formControlName="email" />
+      @if (form.controls.email.invalid && form.controls.email.touched) {
+        <span class="error">Введіть коректний email</span>
+      }
+    </div>
+
+    <div class="form-field">
+      <label for="password">Пароль</label>
+      <input id="password" type="password" formControlName="password" />
+      @if (form.controls.password.invalid && form.controls.password.touched) {
+        <span class="error">Мінімум 6 символів</span>
+      }
+    </div>
+
+    @if (errorMessage) {
+      <p class="error">{{ errorMessage }}</p>
+    }
+
+    <button type="submit" [disabled]="isLoading">
+      {{ isLoading ? 'Зачекайте...' : 'Увійти' }}
+    </button>
+  </form>
+
+  <p>Немає акаунту? <a routerLink="/register">Зареєструватися</a></p>
+</div>

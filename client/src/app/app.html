@@ -1,0 +1,19 @@
+<div class="app-shell">
+  <header class="app-header">
+    <a routerLink="/tickets" class="brand">Helpdesk</a>
+
+    <nav class="app-nav">
+      @if (auth.isAuthenticated()) {
+        <a routerLink="/tickets" routerLinkActive="active">Тікети</a>
+        <button class="btn btn-ghost" (click)="auth.logout()">Вийти</button>
+      } @else {
+        <a routerLink="/login" routerLinkActive="active">Вхід</a>
+        <a routerLink="/register" routerLinkActive="active">Реєстрація</a>
+      }
+    </nav>
+  </header>
+
+  <main class="app-main">
+    <router-outlet />
+  </main>
+</div>
